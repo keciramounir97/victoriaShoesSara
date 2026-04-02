@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useMemo, useState } from "react";
 
 const LanguageContext = createContext(null);
 
-const translations = {
+export const translations = {
   fr: {
     nav: {
       home: "Accueil",

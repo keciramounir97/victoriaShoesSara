@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { products } from "../data.js";
-import { categories } from "../composants/Categories.jsx";
+import { categories } from "../constants/categories.js";
 import { useAuthStore } from "../Stores/authContext.jsx";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 

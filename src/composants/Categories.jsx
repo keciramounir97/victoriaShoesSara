@@ -1,19 +1,8 @@
-import {Link} from  "react-router-dom"
-import "../styles/categories.css"
-import { ArrowRight } from 'lucide-react';
-import heels from "../assets/icons/icon-heels.jpg"
-import sneakers from "../assets/icons/icon-basket.jpg"
-import boots from "../assets/icons/icon-boots.png"
-import sandals from "../assets/icons/icon-sandale.jpg"
-import flats from "../assets/icons/icon-flat.png"
+import { Link } from "react-router-dom";
+import "../styles/categories.css";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
-export const categories = [
-    { id: 'heels', name: 'Heels', icon: <img  src={heels}/>, count: 3 },
-    { id: 'sneakers', name: 'Sneakers', icon: <img  src={sneakers}/>, count: 2 },
-    { id: 'boots', name: 'Boots', icon: <img  src={boots}/>, count: 3 },
-    { id: 'sandals', name: 'Sandals', icon: <img  src={sandals}/>, count: 2 },
-    { id: 'flats', name: 'Flats', icon: <img  src={flats}/>, count: 2 },
-  ];
+import { categories } from "../constants/categories.js";
 export default function Categories() {
     const { t } = useLanguage();
     return (
@@ -31,7 +20,9 @@ export default function Categories() {
               key={cat.id}
               className="p-6 bg-gradient-to-br from-rose-50 to-amber-50 rounded-xl border border-rose-100 hover:border-rose-300 hover:shadow-lg transition-all group"
             >
-              <div className=" mb-3 group-hover:scale-110 transition-transform icons mx-auto">{cat.icon}</div>
+              <div className=" mb-3 group-hover:scale-110 transition-transform icons mx-auto">
+                <img src={cat.iconSrc} alt={cat.name} />
+              </div>
               <h3 className="category-name">{cat.name}</h3>
               <p className="text-sm text-gray-500">{cat.count} articles</p>
             </button>

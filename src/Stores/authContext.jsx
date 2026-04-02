@@ -144,7 +144,7 @@ export const useAuthStore = create(
               isLoading: false,
             });
           }
-        } catch (err) {
+        } catch {
           set({
             user: null,
             token: null,

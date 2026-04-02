@@ -1,7 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { Globe, Menu, Moon, Search, Sun, X } from "lucide-react";
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import logo from "../assets/high-heels.png";
 import { useTheme } from "../contexts/ThemeContext.jsx";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
@@ -29,9 +28,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 px-2 sm:px-4 pt-2">
-      <motion.nav
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+      <nav
         className="rounded-2xl px-3 sm:px-5 py-3"
         style={{
           background: navBg,
@@ -43,12 +40,7 @@ export default function Navbar() {
       >
         <div className="flex items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2 sm:gap-3 no-underline">
-            <motion.img
-              src={logo}
-              alt="Victoria Shoes"
-              className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
-              whileHover={{ rotate: [0, -10, 10, -6, 0], scale: 1.1 }}
-            />
+            <img src={logo} alt="Victoria Shoes" className="w-8 h-8 sm:w-9 sm:h-9 object-contain" />
             <span className="leading-none flex items-baseline gap-1">
               <span
                 className="uppercase tracking-[0.12em] text-[0.95rem] sm:text-[1.05rem] font-semibold"
@@ -86,22 +78,16 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-2">
-            <AnimatePresence>
-              {showSearch && (
-                <motion.input
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 180, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  placeholder={t("shop.searchPlaceholder")}
-                  className={`px-3 py-2 rounded-full outline-none border text-sm ${
-                    isDark
-                      ? "bg-zinc-800 border-zinc-700 text-gray-200 placeholder-gray-400"
-                      : "bg-white border-pink-200 text-gray-800 placeholder-gray-500"
-                  }`}
-                />
-              )}
-            </AnimatePresence>
+            {showSearch && (
+              <input
+                placeholder={t("shop.searchPlaceholder")}
+                className={`w-[180px] px-3 py-2 rounded-full outline-none border text-sm ${
+                  isDark
+                    ? "bg-zinc-800 border-zinc-700 text-gray-200 placeholder-gray-400"
+                    : "bg-white border-pink-200 text-gray-800 placeholder-gray-500"
+                }`}
+              />
+            )}
 
             <button
               type="button"
@@ -165,81 +151,74 @@ export default function Navbar() {
           </button>
         </div>
 
-        <AnimatePresence>
-          {isMobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden pt-3 overflow-hidden"
-            >
-              <div className="flex flex-col gap-2">
-                {navLinks.map(({ label, to }) => (
-                  <NavLink
-                    key={to}
-                    to={to}
-                    onClick={() => setIsMobileOpen(false)}
-                    className={({ isActive }) =>
-                      `px-4 py-2 rounded-xl text-sm no-underline ${
-                        isActive ? "bg-pink-600 text-white" : isDark ? "bg-zinc-800 text-pink-100" : "bg-white/80 text-pink-900"
-                      }`
-                    }
-                  >
-                    {label}
-                  </NavLink>
-                ))}
+        {isMobileOpen && (
+          <div className="md:hidden pt-3 overflow-hidden">
+            <div className="flex flex-col gap-2">
+              {navLinks.map(({ label, to }) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={() => setIsMobileOpen(false)}
+                  className={({ isActive }) =>
+                    `px-4 py-2 rounded-xl text-sm no-underline ${
+                      isActive ? "bg-pink-600 text-white" : isDark ? "bg-zinc-800 text-pink-100" : "bg-white/80 text-pink-900"
+                    }`
+                  }
+                >
+                  {label}
+                </NavLink>
+              ))}
 
-                <div className="grid grid-cols-2 gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={toggleTheme}
-                    className="py-2 rounded-xl border border-pink-200 bg-white/70 text-sm"
-                  >
-                    {theme === "dark" ? t("common.light") : t("common.dark")}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={toggleLanguage}
-                    className="py-2 rounded-xl border border-pink-200 bg-white/70 text-sm"
-                  >
-                    {language === "fr" ? t("common.en") : t("common.fr")}
-                  </button>
-                </div>
-
-                {user ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      logout();
-                      setIsMobileOpen(false);
-                    }}
-                    className="py-2 rounded-xl bg-zinc-900 text-white border-0 text-sm"
-                  >
-                    {t("nav.logout")}
-                  </button>
-                ) : (
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link
-                      to="/login"
-                      onClick={() => setIsMobileOpen(false)}
-                      className="py-2 rounded-xl text-center no-underline bg-white/80 text-pink-900 text-sm"
-                    >
-                      {t("nav.login")}
-                    </Link>
-                    <Link
-                      to="/signup"
-                      onClick={() => setIsMobileOpen(false)}
-                      className="py-2 rounded-xl text-center no-underline bg-pink-600 text-white text-sm"
-                    >
-                      {t("nav.signup")}
-                    </Link>
-                  </div>
-                )}
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="py-2 rounded-xl border border-pink-200 bg-white/70 text-sm"
+                >
+                  {theme === "dark" ? t("common.light") : t("common.dark")}
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleLanguage}
+                  className="py-2 rounded-xl border border-pink-200 bg-white/70 text-sm"
+                >
+                  {language === "fr" ? t("common.en") : t("common.fr")}
+                </button>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.nav>
+
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    setIsMobileOpen(false);
+                  }}
+                  className="py-2 rounded-xl bg-zinc-900 text-white border-0 text-sm"
+                >
+                  {t("nav.logout")}
+                </button>
+              ) : (
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMobileOpen(false)}
+                    className="py-2 rounded-xl text-center no-underline bg-white/80 text-pink-900 text-sm"
+                  >
+                    {t("nav.login")}
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setIsMobileOpen(false)}
+                    className="py-2 rounded-xl text-center no-underline bg-pink-600 text-white text-sm"
+                  >
+                    {t("nav.signup")}
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </nav>
     </header>
   );
 }

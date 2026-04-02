@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuthStore } from '../Stores/authContext';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 
 export default function Login() {
@@ -35,11 +34,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-white dark:from-zinc-950 dark:to-zinc-900 p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
-      >
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-pink-600">Victoria Shoes</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">{t("auth.loginTitle")}</p>
@@ -107,7 +102,7 @@ export default function Login() {
             <Link to="/signup" className="text-pink-600 font-medium no-underline">{t("auth.createAccount")}</Link>
           </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

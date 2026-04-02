@@ -1,6 +1,6 @@
 import { ArrowRight, MapPin, Mail, Phone } from 'lucide-react';
 import { FaInstagram , FaFacebook } from 'react-icons/fa';
-import {categories} from "../composants/Categories"
+import { categories } from "../constants/categories.js";
 import {Link} from 'react-router-dom'
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 
@@ -57,7 +57,7 @@ const Footer = () => {
               {categories.map(cat => (
                 <li key={cat.id}>
                   <span className="hover:text-rose-400 transition-colors flex items-center gap-2">
-                    {cat.icon} {cat.name}
+                    <img src={cat.iconSrc} alt={cat.name} className="w-[18px] h-[18px]" /> {cat.name}
                   </span>
                 </li>
               ))}
