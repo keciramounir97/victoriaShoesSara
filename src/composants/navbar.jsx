@@ -1,296 +1,245 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Search, Sun, Moon, Globe } from 'lucide-react';
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import logo from '../assets/high-heels.png';
-import { useThemeStore } from '../Stores/themeStore';
-
-const navLinks = [
-    { label: 'Home', to: '/' },
-    { label: 'Shop', to: '/shop' },
-    { label: 'Contact', to: '/contact' },
-];
+import { Link, NavLink } from "react-router-dom";
+import { Globe, Menu, Moon, Search, Sun, X } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import logo from "../assets/high-heels.png";
+import { useTheme } from "../contexts/ThemeContext.jsx";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
+import { useAuthStore } from "../Stores/authContext.jsx";
 
 export default function Navbar() {
-    const { theme, toggleTheme } = useThemeStore();
-    const location = useLocation();
-    const [showSearch, setShowSearch] = useState(false);
+  const { theme, isDark, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
+  const { user, logout } = useAuthStore();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
-    // Dynamic styles based on theme
-    const isDark = theme === 'dark';
+  const navLinks = [
+    { label: t("nav.home"), to: "/" },
+    { label: t("nav.shop"), to: "/shop" },
+    { label: t("nav.contact"), to: "/contact" },
+    ...(user ? [{ label: t("nav.admin"), to: "/admin" }] : []),
+  ];
 
-    const neuBase = isDark
-        ? {
-              background: 'linear-gradient(145deg, #2a1f24, #1f171b)',
-              boxShadow: '5px 5px 12px #1a1418, -5px -5px 12px #3a2a32',
-          }
-        : {
-              background: 'linear-gradient(145deg, #fce4ec, #f8d7e0)',
-              boxShadow: '5px 5px 10px #d4a5b0, -5px -5px 10px #ffffff',
-          };
+  const navBg = isDark
+    ? "linear-gradient(145deg, #3a2a32, #2a1f24)"
+    : "linear-gradient(145deg, #fdf0f4, #fce4ec)";
 
-    const neuPressed = isDark
-        ? {
-              boxShadow: 'inset 4px 4px 8px #1a1418, inset -4px -4px 8px #3a2a32',
-          }
-        : {
-              boxShadow: 'inset 3px 3px 7px #d4a5b0, inset -3px -3px 7px #ffffff',
-          };
+  const borderColor = isDark ? "#6b4e5a" : "#f48fb1";
 
-    const navBg = isDark
-        ? 'linear-gradient(145deg, #3a2a32, #2a1f24)'
-        : 'linear-gradient(145deg, #fdf0f4, #fce4ec)';
+  return (
+    <header className="sticky top-0 z-40 px-2 sm:px-4 pt-2">
+      <motion.nav
+        initial={{ y: -24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="rounded-2xl px-3 sm:px-5 py-3"
+        style={{
+          background: navBg,
+          boxShadow: isDark
+            ? "8px 8px 24px #1a1418, -8px -8px 24px #4a3a42, 0 0 0 1.5px #6b4e5a88"
+            : "8px 8px 24px #cfa0b5, -8px -8px 24px #ffffff, 0 0 0 1.5px #f48fb188",
+          border: `1.5px solid ${borderColor}`,
+        }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/" className="flex items-center gap-2 sm:gap-3 no-underline">
+            <motion.img
+              src={logo}
+              alt="Victoria Shoes"
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain"
+              whileHover={{ rotate: [0, -10, 10, -6, 0], scale: 1.1 }}
+            />
+            <span className="leading-none flex items-baseline gap-1">
+              <span
+                className="uppercase tracking-[0.12em] text-[0.95rem] sm:text-[1.05rem] font-semibold"
+                style={{ color: isDark ? "#f8d7e0" : "#9d174d" }}
+              >
+                Victoria
+              </span>
+              <span
+                className="text-[1.3rem] sm:text-[1.5rem] font-bold"
+                style={{ color: isDark ? "#ff80ab" : "#d81b60", fontFamily: "'Dancing Script', cursive" }}
+              >
+                Shoes
+              </span>
+            </span>
+          </Link>
 
-    const borderColor = isDark ? '#6b4e5a' : '#f48fb1';
+          <div className="hidden md:flex items-center gap-2">
+            {navLinks.map(({ label, to }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className={({ isActive }) =>
+                  `px-4 py-2 rounded-full text-sm no-underline transition ${
+                    isActive
+                      ? "bg-pink-600 text-white shadow-md"
+                      : isDark
+                      ? "text-pink-100 hover:bg-zinc-800"
+                      : "text-pink-900 hover:bg-white/70"
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
+          </div>
 
-    const textColor = isDark ? '#f8d7e0' : '#9d174d';
-    const activeTextColor = isDark ? '#ff80ab' : '#d81b60';
-
-    return (
-        <motion.nav
-            initial={{ y: -80, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-            className="mt-2 mx-4 rounded-t-2xl px-6 py-3 flex items-center justify-between"
-            style={{
-                background: navBg,
-                boxShadow: isDark
-                    ? '8px 8px 24px #1a1418, -8px -8px 24px #4a3a42, 0 0 0 1.5px #6b4e5a88'
-                    : '8px 8px 24px #cfa0b5, -8px -8px 24px #ffffff, 0 0 0 1.5px #f48fb188',
-                border: `1.5px solid ${borderColor}`,
-            }}
-        >
-            {/* Logo + Brand */}
-            <Link to="/" style={{ textDecoration: 'none' }} className="flex items-center gap-3">
-                <motion.img
-                    src={logo}
-                    alt="Victoria Shoes"
-                    className="w-9 h-9 object-contain"
-                    whileHover={{ rotate: [0, -10, 10, -6, 0], scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
+          <div className="hidden md:flex items-center gap-2">
+            <AnimatePresence>
+              {showSearch && (
+                <motion.input
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 180, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  placeholder={t("shop.searchPlaceholder")}
+                  className={`px-3 py-2 rounded-full outline-none border text-sm ${
+                    isDark
+                      ? "bg-zinc-800 border-zinc-700 text-gray-200 placeholder-gray-400"
+                      : "bg-white border-pink-200 text-gray-800 placeholder-gray-500"
+                  }`}
                 />
-                <motion.span
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    style={{ userSelect: 'none', lineHeight: 1, display: 'flex', alignItems: 'baseline', gap: '5px' }}
+              )}
+            </AnimatePresence>
+
+            <button
+              type="button"
+              title="Search"
+              onClick={() => setShowSearch((previousValue) => !previousValue)}
+              className="w-9 h-9 rounded-full border border-pink-200 flex items-center justify-center bg-white/60 hover:bg-white"
+            >
+              <Search size={16} />
+            </button>
+
+            <button
+              type="button"
+              title={t("common.theme")}
+              onClick={toggleTheme}
+              className="w-9 h-9 rounded-full border border-pink-200 flex items-center justify-center bg-white/60 hover:bg-white"
+            >
+              {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
+            <button
+              type="button"
+              title={t("common.language")}
+              onClick={toggleLanguage}
+              className="h-9 px-3 rounded-full border border-pink-200 flex items-center justify-center gap-1 bg-white/60 hover:bg-white text-xs font-semibold"
+            >
+              <Globe size={14} />
+              {language.toUpperCase()}
+            </button>
+
+            {user ? (
+              <>
+                <Link to="/admin" className="px-4 py-2 rounded-full bg-pink-600 text-white no-underline text-sm">
+                  {t("nav.admin")}
+                </Link>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="px-4 py-2 rounded-full bg-zinc-800 text-white border-0 text-sm"
                 >
-                    <span
-                        style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            fontSize: '1.05rem',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            color: isDark ? '#f8d7e0' : '#9d174d',
-                            textTransform: 'uppercase',
-                        }}
-                    >
-                        Victoria
-                    </span>
-                    <span
-                        style={{
-                            fontFamily: "'Dancing Script', cursive",
-                            fontSize: '1.5rem',
-                            fontWeight: 700,
-                            color: isDark ? '#ff80ab' : '#d81b60',
-                            letterSpacing: '0.02em',
-                        }}
-                    >
-                        Shoes
-                    </span>
-                </motion.span>
-            </Link>
+                  {t("nav.logout")}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="px-4 py-2 rounded-full text-sm no-underline text-pink-900">
+                  {t("nav.login")}
+                </Link>
+                <Link to="/signup" className="px-4 py-2 rounded-full bg-pink-600 text-white no-underline text-sm">
+                  {t("nav.signup")}
+                </Link>
+              </>
+            )}
+          </div>
 
-            {/* Center Nav Links */}
-            <div className="flex items-center gap-[10px]">
-                {navLinks.map(({ label, to }, i) => {
-                    const active = location.pathname === to;
-                    return (
-                        <motion.div
-                            key={to}
-                            initial={{ opacity: 0, y: -12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            whileHover={{ scale: 1.06 }}
-                            whileTap={{ scale: 0.91, ...neuPressed }}
-                            transition={{ type: 'spring', stiffness: 700, damping: 18, mass: 0.3, delay: 0.15 + i * 0.08 }}
-                            style={{
-                                borderRadius: '999px',
-                                ...neuBase,
-                            }}
-                        >
-                            <Link
-                                to={to}
-                                style={{
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    textDecoration: 'none',
-                                    color: active ? activeTextColor : textColor,
-                                    fontWeight: active ? 600 : 500,
-                                    fontSize: '0.875rem',
-                                    padding: '7px 18px',
-                                    borderRadius: '999px',
-                                    display: 'block',
-                                    letterSpacing: '0.02em',
-                                }}
-                            >
-                                {label}
-                            </Link>
-                        </motion.div>
-                    );
-                })}
-            </div>
+          <button
+            type="button"
+            className="md:hidden w-10 h-10 rounded-full border border-pink-300 flex items-center justify-center bg-white/60"
+            onClick={() => setIsMobileOpen((previousValue) => !previousValue)}
+          >
+            {isMobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
 
-            {/* Right Actions */}
-            <div className="flex items-center gap-[10px]">
-                {/* Search Input */}
-                <AnimatePresence>
-                    {showSearch && (
-                        <motion.input
-                            initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: 180, opacity: 1 }}
-                            exit={{ width: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            placeholder="Search..."
-                            className={`px-3 py-1 rounded-full outline-none border text-sm shadow transition-colors ${
-                                isDark
-                                    ? 'bg-zinc-800 border-zinc-700 text-gray-200 placeholder-gray-400'
-                                    : 'bg-white border-pink-200 text-gray-800 placeholder-gray-500'
-                            }`}
-                        />
-                    )}
-                </AnimatePresence>
+        <AnimatePresence>
+          {isMobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden pt-3 overflow-hidden"
+            >
+              <div className="flex flex-col gap-2">
+                {navLinks.map(({ label, to }) => (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    onClick={() => setIsMobileOpen(false)}
+                    className={({ isActive }) =>
+                      `px-4 py-2 rounded-xl text-sm no-underline ${
+                        isActive ? "bg-pink-600 text-white" : isDark ? "bg-zinc-800 text-pink-100" : "bg-white/80 text-pink-900"
+                      }`
+                    }
+                  >
+                    {label}
+                  </NavLink>
+                ))}
 
-                {/* Search Button */}
-                <motion.button
-                    title="Search"
-                    onClick={() => setShowSearch(!showSearch)}
-                    whileHover={{ scale: 1.12, rotate: 10 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="flex items-center justify-center text-pink-700 cursor-pointer outline-none border-none"
-                    style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        ...neuBase,
-                        border: `1px solid ${isDark ? '#6b4e5a' : '#f8bbd055'}`,
-                    }}
-                >
-                    <Search size={16} color={isDark ? '#f8d7e0' : '#9d174d'} />
-                </motion.button>
-
-                {/* Theme Toggle */}
-                <motion.button
-                    title="Toggle theme"
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <button
+                    type="button"
                     onClick={toggleTheme}
-                    whileHover={{ scale: 1.12, rotate: 30 }}
-                    whileTap={{ scale: 0.9, ...neuPressed }}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-                    className="flex items-center justify-center cursor-pointer outline-none border-none"
-                    style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        ...neuBase,
-                        border: `1px solid ${isDark ? '#6b4e5a' : '#f8bbd055'}`,
-                    }}
-                >
-                    {isDark ? (
-                        <Sun size={16} color="#f8d7e0" />
-                    ) : (
-                        <Moon size={16} color="#9d174d" />
-                    )}
-                </motion.button>
+                    className="py-2 rounded-xl border border-pink-200 bg-white/70 text-sm"
+                  >
+                    {theme === "dark" ? t("common.light") : t("common.dark")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={toggleLanguage}
+                    className="py-2 rounded-xl border border-pink-200 bg-white/70 text-sm"
+                  >
+                    {language === "fr" ? t("common.en") : t("common.fr")}
+                  </button>
+                </div>
 
-                {/* Language / Globe */}
-                <motion.button
-                    title="Change language"
-                    whileHover={{ scale: 1.12 }}
-                    whileTap={{ scale: 0.9, ...neuPressed }}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.35, type: 'spring', stiffness: 200 }}
-                    className="flex items-center justify-center cursor-pointer outline-none border-none"
-                    style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        ...neuBase,
-                        border: `1px solid ${isDark ? '#6b4e5a' : '#f8bbd055'}`,
+                {user ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setIsMobileOpen(false);
                     }}
-                >
-                    <Globe size={16} color={isDark ? '#f8d7e0' : '#9d174d'} />
-                </motion.button>
-
-                {/* Divider */}
-                <span
-                    className="mx-1 h-6 w-px rounded-full"
-                    style={{
-                        background: isDark
-                            ? 'linear-gradient(to bottom, transparent, #8b6f7f, transparent)'
-                            : 'linear-gradient(to bottom, transparent, #e8a0b8, transparent)',
-                    }}
-                />
-
-                {/* Login */}
-                <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95, ...neuPressed }}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4, type: 'spring', stiffness: 140 }}
-                    style={{
-                        borderRadius: '999px',
-                        ...neuBase,
-                    }}
-                >
+                    className="py-2 rounded-xl bg-zinc-900 text-white border-0 text-sm"
+                  >
+                    {t("nav.logout")}
+                  </button>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
                     <Link
-                        to="/login"
-                        style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            textDecoration: 'none',
-                            display: 'block',
-                            padding: '7px 22px',
-                            borderRadius: '999px',
-                            fontSize: '0.8125rem',
-                            fontWeight: 600,
-                            color: textColor,
-                            letterSpacing: '0.02em',
-                        }}
+                      to="/login"
+                      onClick={() => setIsMobileOpen(false)}
+                      className="py-2 rounded-xl text-center no-underline bg-white/80 text-pink-900 text-sm"
                     >
-                        Login
+                      {t("nav.login")}
                     </Link>
-                </motion.div>
-
-                {/* Sign Up */}
-                <motion.div
-                    whileHover={{ scale: 1.06, boxShadow: isDark ? '0 0 20px #f0629266' : '0 0 20px #ec407a66' }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0, x: 16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.48, type: 'spring', stiffness: 140 }}
-                    style={{ borderRadius: '999px' }}
-                >
                     <Link
-                        to="/signup"
-                        style={{
-                            fontFamily: "'Montserrat', sans-serif",
-                            textDecoration: 'none',
-                            display: 'block',
-                            padding: '7px 22px',
-                            borderRadius: '999px',
-                            fontSize: '0.8125rem',
-                            fontWeight: 700,
-                            color: '#ffffff',
-                            letterSpacing: '0.03em',
-                            background: 'linear-gradient(135deg, #f06292, #d81b60)',
-                            boxShadow: '4px 4px 12px #c2185b55, -2px -2px 8px #ffffff44',
-                        }}
+                      to="/signup"
+                      onClick={() => setIsMobileOpen(false)}
+                      className="py-2 rounded-xl text-center no-underline bg-pink-600 text-white text-sm"
                     >
-                        Sign Up
+                      {t("nav.signup")}
                     </Link>
-                </motion.div>
-            </div>
-        </motion.nav>
-    );
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+    </header>
+  );
 }

@@ -3,20 +3,11 @@ import { ArrowRight } from 'lucide-react';
 import ProductCard from "../composants/ProductCard"
 import {products} from "../data"
 import {useState} from "react"
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 export default function Nouveaute() {
-    
+    const { t } = useLanguage();
     const [wishlist, setWishlist] = useState([]);
-    const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-    const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState(null);
-
-
-
-
-    const openProductDetail = (product) => {
-        setSelectedProduct(product);
-        setIsProductDetailOpen(true);
-      };
+    const openProductDetail = () => {};
     
     const toggleWishlist = (productId) => {
         setWishlist(prev => 
@@ -25,21 +16,18 @@ export default function Nouveaute() {
             : [...prev, productId]
         );
       };
-      const openQuickView = (product) => {
-        setSelectedProduct(product);
-        setIsQuickViewOpen(true);
-      };
+      const openQuickView = () => {};
     
     return <>
      <div className="px-7  pt-8">
        <div className="flex justify-between" >
-       <h2 className=" title"> Nouveautés </h2>
+       <h2 className=" title"> {t("home.newArrivals")} </h2>
         <button> 
-        <Link to="/shop" className="links flex  "> Tout Voir <ArrowRight className="w-4 h-4 ml-1 mt-1"/> </Link>
+        <Link to="/shop" className="links flex  "> {t("common.viewAll")} <ArrowRight className="w-4 h-4 ml-1 mt-1"/> </Link>
         </button>
         </div>
-        <p className="text-gray-600"> Les dernières arrivages</p>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <p className="text-gray-600">{t("shop.subtitle")}</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {products.filter(p => p.isNew).slice(0, 4).map(p => (
             <ProductCard 
               key={p.id} 

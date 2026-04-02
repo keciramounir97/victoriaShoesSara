@@ -1,5 +1,3 @@
-
-import React from 'react';
 import image from "../assets/hero.jpg";
 
 export default function HeroGrid() {

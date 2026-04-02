@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Heart, Eye, ShoppingBag, Star } from 'lucide-react';
 import Badge from './Badge';
-import {products} from "../data"
 import  "../styles/productCard.css"
 
 const ProductCard = ({ product, wishlist, toggleWishlist, openQuickView, openProductDetail }) => {

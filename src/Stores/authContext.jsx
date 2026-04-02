@@ -8,14 +8,16 @@ const fakeUsers = [
     name: "Sarah Benali",
     email: "sarah@example.com",
     password: "123456",
-    avatar: "https://i.pravatar.cc/150?img=47"
+    avatar: "https://i.pravatar.cc/150?img=47",
+    role: "admin",
   },
   {
     id: 2,
     name: "Karim Amrani",
     email: "karim@example.com",
     password: "password",
-    avatar: "https://i.pravatar.cc/150?img=68"
+    avatar: "https://i.pravatar.cc/150?img=68",
+    role: "customer",
   }
 ];
 
@@ -49,6 +51,7 @@ export const useAuthStore = create(
               name: foundUser.name,
               email: foundUser.email,
               avatar: foundUser.avatar,
+              role: foundUser.role,
             },
             token: fakeToken,
             isLoading: false,
@@ -78,7 +81,8 @@ export const useAuthStore = create(
           name,
           email,
           password,
-          avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`
+          avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+          role: "customer",
         };
 
         fakeUsers.push(newUser);
@@ -91,6 +95,7 @@ export const useAuthStore = create(
             name: newUser.name,
             email: newUser.email,
             avatar: newUser.avatar,
+            role: newUser.role,
           },
           token: fakeToken,
           isLoading: false,
@@ -122,7 +127,16 @@ export const useAuthStore = create(
           const foundUser = fakeUsers.find(u => u.email === currentUserEmail);
 
           if (foundUser && get().user) {
-            set({ isLoading: false });
+            set({
+              user: {
+                id: foundUser.id,
+                name: foundUser.name,
+                email: foundUser.email,
+                avatar: foundUser.avatar,
+                role: foundUser.role,
+              },
+              isLoading: false,
+            });
           } else {
             set({
               user: null,

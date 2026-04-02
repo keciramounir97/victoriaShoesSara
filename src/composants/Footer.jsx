@@ -1,20 +1,13 @@
-import React from 'react';
-import { ArrowRight, Heart,   MapPin, Mail, Phone } from 'lucide-react';
+import { ArrowRight, MapPin, Mail, Phone } from 'lucide-react';
 import { FaInstagram , FaFacebook } from 'react-icons/fa';
-import Button from '../composants/Button';
 import {categories} from "../composants/Categories"
 import {Link} from 'react-router-dom'
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 const Footer = () => {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
   
-  const setSelectedCategory = (id) => {
-    console.log('Selected category:', id);
-  };
-  
-  const setCurrentView = (view) => {
-    console.log('Current view:', view);
-  };
 
   const socialLinks = [
     { icon: FaFacebook, href: "https://facebook.com", label: "Facebook", bgHover: "hover:bg-blue-600" },
@@ -38,9 +31,7 @@ const Footer = () => {
                         Shoes
                     </span>
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              Discover elegance in every step. We curate the finest women's shoes from around the world.
-            </p>
+            <p className="text-gray-300 text-sm leading-relaxed">{t("home.description")}</p>
             
             {/* Social Links - Version corrigée */}
             <div className="flex space-x-3 pt-2">
@@ -61,20 +52,13 @@ const Footer = () => {
           
           {/* Shop  */}
           <div className='flex flex-col items-start ' >
-            <h3 className="font-semibold text-lg mb-4">Shop</h3>
+            <h3 className="font-semibold text-lg mb-4">{t("nav.shop")}</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               {categories.map(cat => (
                 <li key={cat.id}>
-                  <button 
-                    onClick={() => { 
-                      setSelectedCategory(cat.id); 
-                      setCurrentView('grid'); 
-                    }} 
-                    className="hover:text-rose-400 transition-colors flex items-center gap-2 flex-"
-                    style={{height:"18px", width:"18px"}}
-                  >
+                  <span className="hover:text-rose-400 transition-colors flex items-center gap-2">
                     {cat.icon} {cat.name}
-                  </button>
+                  </span>
                 </li>
               ))}
             </ul>
@@ -94,7 +78,7 @@ const Footer = () => {
           
           {/* Contact Info */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-amber-400">Contact Us</h3>
+            <h3 className="font-semibold text-lg mb-4 text-amber-400">{t("nav.contact")}</h3>
             <ul className="space-y-3 text-sm text-gray-300">
               <li className="flex items-start gap-2">
                 <MapPin size={18} className="text-amber-400 mt-0.5 flex-shrink-0" />

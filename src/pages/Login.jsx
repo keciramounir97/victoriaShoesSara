@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useAuthStore } from '../Stores/authContext';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../contexts/LanguageContext.jsx';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { t } = useLanguage();
 
   const { login, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
@@ -40,13 +42,13 @@ export default function Login() {
       >
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-pink-600">Victoria Shoes</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">Connectez-vous</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">{t("auth.loginTitle")}</p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 p-8 rounded-3xl shadow-xl border border-pink-100 dark:border-zinc-700">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
+              <label className="block text-sm font-medium mb-1">{t("auth.email")}</label>
               <input
                 type="email"
                 value={email}
@@ -61,7 +63,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Mot de passe</label>
+              <label className="block text-sm font-medium mb-1">{t("auth.password")}</label>
               <input
                 type="password"
                 value={password}
@@ -86,13 +88,23 @@ export default function Login() {
               disabled={isLoading}
               className="w-full py-3.5 bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded-2xl transition disabled:opacity-70"
             >
-              {isLoading ? "Connexion en cours..." : "Se connecter"}
+              {isLoading ? t("auth.signingIn") : t("auth.submitLogin")}
             </button>
           </form>
 
+          <p className="text-xs text-pink-700 bg-pink-50 rounded-xl p-3 mt-4">
+            {t("auth.demoCreds")}
+          </p>
+
+          <div className="text-center mt-4">
+            <Link to="/reset-password" className="text-sm text-pink-600 no-underline">
+              {t("auth.forgotPassword")}
+            </Link>
+          </div>
+
           <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
-            Pas de compte ?{' '}
-            <Link to="/signup" className="text-pink-600 font-medium">Créer un compte</Link>
+            {t("auth.noAccount")}{' '}
+            <Link to="/signup" className="text-pink-600 font-medium no-underline">{t("auth.createAccount")}</Link>
           </p>
         </div>
       </motion.div>
