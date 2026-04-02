@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { products } from "../data";
 import ProductCard from "../composants/ProductCard";
-import { categories } from "../composants/Categories";
+import { categories } from "../data/categories.js";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export default function Shop() {

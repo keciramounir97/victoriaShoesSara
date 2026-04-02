@@ -1,7 +1,7 @@
 import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { categories } from "./Categories.jsx";
+import { categories } from "../data/categories.js";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 const socialLinks = [

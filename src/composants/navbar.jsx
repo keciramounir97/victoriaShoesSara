@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Menu, Moon, Search, Sun, Globe, X } from "lucide-react";
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import logo from "../assets/high-heels.png";
 import { useTheme } from "../contexts/ThemeContext.jsx";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
@@ -39,12 +39,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-6">
-      <motion.nav
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.35 }}
-        className={`rounded-2xl border px-4 py-3 sm:px-5 ${surfaceClasses} shadow-lg`}
-      >
+      <nav className={`rounded-2xl border px-4 py-3 sm:px-5 ${surfaceClasses} shadow-lg`}>
         <div className="flex items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2 no-underline">
             <img src={logo} alt="Victoria Shoes" className="h-9 w-9 object-contain" />
@@ -72,10 +67,7 @@ export default function Navbar() {
           <div className="hidden items-center gap-2 md:flex">
             <AnimatePresence>
               {showSearch && (
-                <motion.input
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 180, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
+                <input
                   placeholder={t("common.search")}
                   className={`h-9 rounded-full border px-3 text-sm outline-none ${
                     isDark
@@ -147,12 +139,7 @@ export default function Navbar() {
 
         <AnimatePresence>
           {isMobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-3 space-y-2 border-t border-rose-200 pt-3 dark:border-zinc-700 md:hidden"
-            >
+            <div className="mt-3 space-y-2 border-t border-rose-200 pt-3 dark:border-zinc-700 md:hidden">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
@@ -213,10 +200,10 @@ export default function Navbar() {
                   {t("nav.logout")}
                 </button>
               )}
-            </motion.div>
+            </div>
           )}
         </AnimatePresence>
-      </motion.nav>
+      </nav>
     </header>
   );
 }
