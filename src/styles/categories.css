@@ -1,0 +1,18 @@
+.title{
+    font-weight:bold;
+    font-size:28px;
+    
+}
+.links{
+    text-decoration:none;
+    color:#f43f5e;
+    font-size:14px;
+}
+.icons{
+    height: 28px;
+    width:28px;
+}
+.category-name{
+    font-size:18px;
+    font-weight:bold;
+}

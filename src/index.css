@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@layer base {
+    :root {
+      --color-rose-50: #fff5f5;
+      --color-rose-100: #ffe4e4;
+      --color-rose-200: #fecaca;
+      --color-rose-300: #fca5a5;
+      --color-rose-400: #f87171;
+      --color-rose-500: #f43f5e;
+      --color-rose-600: #e11d48;
+      --color-rose-700: #be123c;
+      --color-amber-400: #fbbf24;
+      --color-amber-500: #f59e0b;
+    }
+  }
+  @layer utilities {
+    .line-clamp-1 {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+    }
+}
+
+
+
+
+body.dark {
+  background-color: #020617;
+  color: #f9fafb;
+}
+
+body.light {
+  background-color: #ffffff;
+  color: #020617;
+}
+
+
+a {
+  color: inherit;
+  background-color: inherit;
+}
+
+body {
+  transition: background-color 0.3s ease , color 0.3s ease ;
+}

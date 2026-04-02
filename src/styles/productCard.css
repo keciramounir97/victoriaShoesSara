@@ -1,0 +1,8 @@
+.product-name{
+    font-size:16px;
+    font-weight:600;
+   
+}
+.wishlist , .eye , .shoppingBag{
+    border-radius:50%;
+}
