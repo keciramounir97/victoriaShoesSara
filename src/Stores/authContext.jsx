@@ -1,22 +1,29 @@
 import { create } from "zustand";
+// `create` instancie un store Zustand : état global léger sans Context Provider pour l’auth (déjà en place dans le projet).
 import { persist } from "zustand/middleware";
+// `persist` réhydrate `user` et `token` depuis localStorage au chargement ; on simule une session durable comme une vraie app.
 
-// Données fake (utilisateurs simulés)
+/** E-mail du compte « administrateur » pour la fausse auth (accès /admin uniquement si rôle admin). */
+export const ADMIN_EMAIL = "sarah@example.com";
+
+// Données fake (utilisateurs simulés) — en production ce serait une API ; ici on valide en mémoire pour la démo.
 const fakeUsers = [
   {
     id: 1,
     name: "Sarah Benali",
     email: "sarah@example.com",
     password: "123456",
-    avatar: "https://i.pravatar.cc/150?img=47"
+    avatar: "https://i.pravatar.cc/150?img=47",
+    role: "admin",
   },
   {
     id: 2,
     name: "Karim Amrani",
     email: "karim@example.com",
     password: "password",
-    avatar: "https://i.pravatar.cc/150?img=68"
-  }
+    avatar: "https://i.pravatar.cc/150?img=68",
+    role: "user",
+  },
 ];
 
 export const useAuthStore = create(
@@ -42,6 +49,7 @@ export const useAuthStore = create(
 
         if (foundUser) {
           const fakeToken = "fake-jwt-token-" + Date.now();
+          // Jeton factice : suffit pour les routes protégées côté front ; un vrai JWT serait signé côté serveur.
 
           set({
             user: {
@@ -49,6 +57,8 @@ export const useAuthStore = create(
               name: foundUser.name,
               email: foundUser.email,
               avatar: foundUser.avatar,
+              role: foundUser.role || "user",
+              // `role` distingue admin / utilisateur sans second système d’auth.
             },
             token: fakeToken,
             isLoading: false,
@@ -78,7 +88,8 @@ export const useAuthStore = create(
           name,
           email,
           password,
-          avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`
+          avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+          role: email === ADMIN_EMAIL ? "admin" : "user",
         };
 
         fakeUsers.push(newUser);
@@ -91,6 +102,8 @@ export const useAuthStore = create(
             name: newUser.name,
             email: newUser.email,
             avatar: newUser.avatar,
+            role: newUser.role,
+            // On réutilise `newUser.role` pour éviter de dupliquer la logique admin / user.
           },
           token: fakeToken,
           isLoading: false,
@@ -130,7 +143,7 @@ export const useAuthStore = create(
               isLoading: false,
             });
           }
-        } catch (err) {
+        } catch {
           set({
             user: null,
             token: null,
@@ -204,6 +217,7 @@ export const useAuthStore = create(
       partialize: (state) => ({
         user: state.user,
         token: state.token,
+        // On n’persiste pas `isLoading` ni `error` : au rechargement on veut un état UI propre.
       }),
     }
   )

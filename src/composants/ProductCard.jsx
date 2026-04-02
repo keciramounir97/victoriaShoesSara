@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { Heart, Eye, ShoppingBag, Star } from 'lucide-react';
 import Badge from './Badge';
-import {products} from "../data"
-import  "../styles/productCard.css"
+import '../styles/productCard.css';
+import { useLanguage } from '../context/LanguageContext';
 
 const ProductCard = ({ product, wishlist, toggleWishlist, openQuickView, openProductDetail }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <div 
-      className="group relative bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer"
+      className="group relative bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer border border-transparent dark:border-zinc-800"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => openProductDetail(product)}
@@ -25,10 +26,10 @@ const ProductCard = ({ product, wishlist, toggleWishlist, openQuickView, openPro
         {/* Badges */}
         <div className="absolute top-3 left-3 flex gap-2">
           {product.isNew && (
-            <Badge className="bg-rose-500 text-white shadow-lg">New</Badge>
+            <Badge className="bg-rose-500 text-white shadow-lg">{t('productNew')}</Badge>
           )}
           {product.isBestseller && (
-            <Badge className="bg-amber-500 text-white shadow-lg">Bestseller</Badge>
+            <Badge className="bg-amber-500 text-white shadow-lg">{t('productBestseller')}</Badge>
           )}
         </div>
         
@@ -80,8 +81,8 @@ const ProductCard = ({ product, wishlist, toggleWishlist, openQuickView, openPro
       
       {/* Product Info */}
       <div className="p-4">
-        <p className="text-xs text-gray-500 mb-1">{product.brand}</p>
-        <h4 className=" product-name font-semibold text-gray-900 mb-2 line-clamp-1  ">{product.name}</h4>
+        <p className="text-xs text-gray-500 dark:text-zinc-400 mb-1">{product.brand}</p>
+        <h4 className="product-name font-semibold text-gray-900 dark:text-zinc-100 mb-2 line-clamp-1">{product.name}</h4>
         
         {/* Rating */}
         <div className="flex items-center gap-1 mb-2">
@@ -97,14 +98,14 @@ const ProductCard = ({ product, wishlist, toggleWishlist, openQuickView, openPro
               />
             ))}
           </div>
-          <span className="text-xs text-gray-500 ml-1">({product.reviews})</span>
+          <span className="text-xs text-gray-500 dark:text-zinc-400 ml-1">({product.reviews})</span>
         </div>
         
         {/* Price */}
         <div className="flex items-center gap-2">
           <span className="font-bold text-rose-600">{product.price} Da</span>
           {product.originalPrice > product.price && (
-            <span className="text-sm text-gray-400 line-through">{product.originalPrice} Da</span>
+            <span className="text-sm text-gray-400 dark:text-zinc-500 line-through">{product.originalPrice} Da</span>
           )}
         </div>
       </div>

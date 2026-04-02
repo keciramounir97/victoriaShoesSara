@@ -1,0 +1,2 @@
+/* Styles globaux légers de l’application ; la plupart du design utilise Tailwind dans les composants. */
+/* Ce fichier existe car `App.jsx` l’importe : une feuille vide casserait le build Vite. */
